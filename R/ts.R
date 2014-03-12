@@ -534,7 +534,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
   data<-dateOfPoint
   unit<-globalUnit
   
-  return(list(length(cenValue),length(dateOfPoint),length(golbalUnit)))
+  return(list(length(cenValue),length(dateOfPoint),length(globalUnit)))
   
   data<-as.Date(data)
   valu<-as.numeric(valu)
