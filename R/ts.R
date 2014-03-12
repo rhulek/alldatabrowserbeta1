@@ -305,8 +305,6 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     }
   }
 
-  return(list(cenValue,botValue,topValue,dateOfPoint,nameOfSeries,segment,typeOfSeries,seriesDescription,parameterDescription,valueDescription))
-  
   
   ## Treti opakovani cyklu - vypocet trendu primarnich rad
   
