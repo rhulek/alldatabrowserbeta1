@@ -346,7 +346,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
       hole<-0
     }
     
-    if (max(c(hole,dateTime[-1]-dateTime[-length(records[[i]]$values)]))>hole) { # Hole added to the vector to avoid problems with vector of length 1.
+    if (max(c(hole,dateTime[-1]-dateTime[-length(records[[i]]$values)]))>hole|(length(dateTime)<3)) { # Hole added to the vector to avoid problems with vector of length 1.
       series<-NA
     } else {
       curve<-data.frame(as.Date(as.numeric(genplot(valu,dateTime,n=20,distr="lnorm",plot=FALSE)$belt[1,]),origin="1970-01-01"),
@@ -470,7 +470,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
       hole<-0
     }
     
-    if ((max(c(hole,aggr$dateTime[-1]-aggr$dateTime[-nrow(aggr)]))>hole)|(nrow(aggr)<3)) {
+    if ((max(c(hole,aggr$dateTime[-1]-aggr$dateTime[-nrow(aggr)]))>=hole)|(nrow(aggr)<3)) {
       series<-NA
     } else {
       curve<-data.frame(as.Date(as.numeric(genplot(aggr$centralValue,aggr$dateTime,n=20,distr="lnorm",plot=FALSE)$belt[1,]),origin="1970-01-01"),
