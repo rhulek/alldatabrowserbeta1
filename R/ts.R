@@ -244,9 +244,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
       nameOfSeries<-c(nameOfSeries,loca)
       segment     <-c(segment,k)
       typeOfSeries<-c(typeOfSeries,"aggr")
-      globalUnit  <-c(globalUnit,unique(aggr$unit))
-      
-      return(globalUnit)
+      globalUnit  <-c(globalUnit,as.character(unique(aggr$unit)))
     }
     
     # Popis agregovanych casovych rad ve 2. cyklu
