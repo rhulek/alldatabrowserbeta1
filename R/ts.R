@@ -91,7 +91,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
       dateOfPoint <-c(dateOfPoint,dateTimeString[j])
       nameOfSeries<-c(nameOfSeries,loca)
       segment     <-c(segment,k)
-      typeOfSeries<-c(typeOfSeries,"primary")
+      typeOfSeries<-c(typeOfSeries,"prim")
     }
     
     # Popis primarnich casovych rad v 1. cyklu    
@@ -378,26 +378,28 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
                  whiskerBottomValue=curve$lower[j],
                  dateTimeString=as.character(curve$belt[j]))
         
-        values<-as.list(c(values,list(cv)))
+        cenValue    <-c(cenValue,curve$line[j])
+        botValue    <-c(botValue,curve$lower[j])
+        topValue    <-c(botValue,curve$upper[j])
+        dateOfPoint <-c(dateOfPoint,as.character(curve$belt[j]))
+        nameOfSeries<-c(nameOfSeries,loca)
+        segment     <-c(segment,1)
+        typeOfSeries<-c(typeOfSeries,"prim_trend") 
       }
     }
     
-    timeSeriesRecord<-list(values=values,label=paste0("site_trend",i))
-    series<-as.list(c(series,list(timeSeriesRecord)))
-    
     # Popis trendovych krivek v 3. cyklu.    
-    if (max(c(hole,dateTime[-1]-dateTime[-length(records[[i]]$values)]))>hole) {
-      trendSummary<-list(slope=genplot(valu,dateTime,n=20,distr="lnorm",plot=FALSE)$slope,
-                         intercept=genplot(valu,dateTime,n=20,distr="lnorm",plot=FALSE)$intercept)
+    if (max(c(hole,dateTime[-1]-dateTime[-length(records[[i]]$values)]))<hole) {
+      parameterNames<-c("slope",
+                        "intercept")
+      
+      parameterValues<-list(genplot(valu,dateTime,n=20,distr="lnorm",plot=FALSE)$slope,
+                            genplot(valu,dateTime,n=20,distr="lnorm",plot=FALSE)$intercept)
+      
+      seriesDescription<-c(seriesDescription,rep(loca,length(parameterNames)))
+      parameterDescription<-c(parameterDescription,parameterNames)
+      valueDescription<-c(valueDescription,parameterValues)
     }
-    else {
-      trendSummary<-NA
-    }
-    
-    seriesSet<-list(series=series,trendSummary=trendSummary,label=paste0("site_trend",i));
-    seriesSets<-as.list(c(seriesSets,list(seriesSet)))
-    label<-paste0("Site_trend",i)
-    labels<-as.list(c(labels,list(label)))
   }
   
   ## Ctvrte opakovani cyklu - vypocet trendu agregovanych rad
@@ -497,32 +499,28 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
       
       # j cyklus bezi pres jednotlive body krivky
       for (j in 1:nrow(curve)) {
-        aggValue<-list(label=loca,
-                       centralValue=curve$line[j],
-                       whiskerTopValue=curve$upper[j],
-                       whiskerBottomValue=curve$lower[j],
-                       dateTimeString=as.character(curve$belt[j]))
-        
-        values<-as.list(c(values,list(aggValue)))
+        cenValue    <-c(cenValue,curve$line[j])
+        botValue    <-c(botValue,curve$lower[j])
+        topValue    <-c(botValue,curve$upper[j])
+        dateOfPoint <-c(dateOfPoint,as.character(curve$belt[j]))
+        nameOfSeries<-c(nameOfSeries,loca)
+        segment     <-c(segment,1)
+        typeOfSeries<-c(typeOfSeries,"aggr_trend") 
       }
-      
-      timeSeriesRecord<-list(values=values,label=paste0("site_trend_aggr",i))
-      series<-as.list(c(series,list(timeSeriesRecord)))
     }
     
     # Popis trendovych agregovanych krivek ve 4. cyklu.    
-    if (max(c(hole,aggr$dateTime[-1]-aggr$dateTime[-nrow(aggr)]))>hole) {
-      trendSummary<-list(slope=genplot(valu,aggr$dateTime,n=20,distr="lnorm",plot=FALSE)$slope,
-                         intercept=genplot(valu,aggr$dateTime,n=20,distr="lnorm",plot=FALSE)$intercept)
+    if (max(c(hole,aggr$dateTime[-1]-aggr$dateTime[-nrow(aggr)]))<hole) {
+      parameterNames<-c("slope",
+                        "intercept")
+      
+      parameterValues<-list(genplot(valu,aggr$dateTime,n=20,distr="lnorm",plot=FALSE)$slope,
+                            genplot(valu,aggr$dateTime,n=20,distr="lnorm",plot=FALSE)$intercept)
+      
+      seriesDescription<-c(seriesDescription,rep(loca,length(parameterNames)))
+      parameterDescription<-c(parameterDescription,parameterNames)
+      valueDescription<-c(valueDescription,parameterValues)
     }
-    else {
-      trendSummary<-NA
-    }
-    
-    seriesSet<-list(series=series,trendSummary=trendSummary,label=paste0("site_trend_aggr",i));
-    seriesSets<-as.list(c(seriesSets,list(seriesSet)))
-    label<-paste0("Site_trend_aggr",i)
-    labels<-as.list(c(labels,list(label)))
   }
   
 
@@ -597,74 +595,72 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
   
   # j cyklus bezi pres jednotliva mereni
   for (j in 1:nrow(aggr)) {
-    aggValue<-list(label=paste0("all_aggregation"),
-                   n=aggr$n[j],
-                   nUnderLOQ=aggr$nUnderLOQ[j],
-                   unit=aggr$unit[j],
-                   centralValue=aggr$centralValue[j],
-                   centralValueType=aggr$centralValueType[j],
-                   whiskerTopValue=aggr$whiskerTopValue[j],
-                   whiskerBottomValue=aggr$whiskerBottomValue[j],
-                   whiskerType=aggr$whiskerType[j],
-                   dateTimeString=aggr$dateTimeString[j]);
+    cenValue    <-c(cenValue,aggr$centralValue[j])
+    botValue    <-c(botValue,aggr$whiskerBottomValue[j])
+    topValue    <-c(botValue,aggr$whiskerTopValue[j])
+    dateOfPoint <-c(dateOfPoint,aggr$dateTimeString[j])
+    nameOfSeries<-c(nameOfSeries,"Total")
+    segment     <-c(segment,k)
+    typeOfSeries<-c(typeOfSeries,"whol") 
     
-    if (j==1) {
-      values<-as.list(c(values,list(aggValue)))
-    } else {
-      if ((aggr$dateTime[j]-aggr$dateTime[j-1])<hole) {
-        values<-as.list(c(values,list(aggValue)))
-      } else {
-        timeSeriesRecord<-list(values=values,label=paste0("all_aggr",i," part",k))
+    if (j!=1) {
+      if ((aggr$dateTime[j]-aggr$dateTime[j-1])>=hole) {
         k<-k+1
-        series<-as.list(c(series,list(timeSeriesRecord)))
-        values<-list(aggValue)
       }
     }
   }
-  timeSeriesRecord<-list(values=values,label=paste0("all_aggr",i," part",k))
-  series<-as.list(c(series,list(timeSeriesRecord)))
+
   
   # Popis celkove agregovane rady
   if (k==1) {
     res<-genstatistic(aggr$centralValue,aggr$dateTime)$res
     
-    trendSummary<-list(delta=res$delta,
-                       mannKendall=res$"Mann-Kendall",
-                       mannKendallP=res$MKp,
-                       daniels=res$Daniels,
-                       danielsP=res$Dp,
-                       mean=res$mean,
-                       sd=res$sd,
-                       geomean=res$"geom. mean",
-                       gsd=res$"geom. sd",
-                       median=res$median,
-                       min=res$min,
-                       max=res$max,
-                       perc5=quantile05(aggr$centralValue),
-                       perc25=quantile25(aggr$centralValue),
-                       perc75=quantile75(aggr$centralValue),
-                       perc95=quantile95(aggr$centralValue),
-                       geoMean95CIUpperBound=res$"geom. mean"*res$"geom. sd"^qnorm(0.975),
-                       geoMean95CILowerBound=res$"geom. mean"*res$"geom. sd"^qnorm(0.025),
-                       mean95CIUpperBound=res$mean+qnorm(0.975)*res$sd,
-                       mean95CILowerBound=res$mean+qnorm(0.025)*res$sd)
+    parameterNames<-c("delta",
+                      "mannKendall",
+                      "mannKendallP",
+                      "daniels",
+                      "danielsP",
+                      "mean",
+                      "sd",
+                      "geomean",
+                      "gsd",
+                      "median",
+                      "min",
+                      "max",
+                      "perc5",
+                      "perc25",
+                      "perc75",
+                      "perc95",
+                      "geoMean95CIUpperBound",
+                      "geoMean95CILowerBound",
+                      "mean95CIUpperBound",
+                      "mean95CILowerBound")
+    
+    parameterValues<-list(res$delta,
+                          res$"Mann-Kendall",
+                          res$MKp,
+                          res$Daniels,
+                          res$Dp,
+                          res$mean,
+                          res$sd,
+                          res$"geom. mean",
+                          res$"geom. sd",
+                          res$median,
+                          res$min,
+                          res$max,
+                          quantile05(aggr$centralValue),
+                          quantile25(aggr$centralValue),
+                          quantile75(aggr$centralValue),
+                          quantile95(aggr$centralValue),
+                          res$"geom. mean"*res$"geom. sd"^qnorm(0.975),
+                          res$"geom. mean"*res$"geom. sd"^qnorm(0.025),
+                          res$mean+qnorm(0.975)*res$sd,
+                          res$mean+qnorm(0.025)*res$sd)
+    
+    seriesDescription<-c(seriesDescription,rep("Total",length(parameterNames)))
+    parameterDescription<-c(parameterDescription,parameterNames)
+    valueDescription<-c(valueDescription,parameterValues)
   }
-  else {
-    trendSummary<-NA
-  }
-  
-  seriesSet<-list(series=series,trendSummary=trendSummary,label="all_agr")
-  allAggregation<-list(seriesSet)
-  label<-"All_aggr"
-  aggregationLabels<-list(label)
-  
-  ## Zabaleni vysledku
-  allSeries<-list(seriesSets=seriesSets,
-                  labels=labels,
-                  allAggregation=allAggregation,
-                  aggregationLabels=aggregationLabels)
-  
-  timeSeriesDataSeries<-list(allSeries=allSeries)
   
   casovani<-c(casovani,"Konec",as.character(format(Sys.time(), "%H:%M:%OS3")))
   
