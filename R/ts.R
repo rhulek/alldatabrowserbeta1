@@ -247,8 +247,6 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
       globalUnit  <-c(globalUnit,unique(aggr$unit))
     }
     
-    return(aggr$unit)
-    
     # Popis agregovanych casovych rad ve 2. cyklu
     if (k==1) {
       res<-genstatistic(aggr$centralValue,aggr$dateTime)$res
@@ -301,7 +299,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     }
   }
 
-  
+  return(globalUnit)
   ## Treti opakovani cyklu - vypocet trendu primarnich rad
   
   # i cyklus bezi pres sites
@@ -525,8 +523,6 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
   unit<-unit[order(data)]
   valu<-valu[order(data)]
   data<-data[order(data)]
-  
-  return(globalUnit)
   
   # Jednotky musi byt stejne
   if (length(unique(unit))>1) {
