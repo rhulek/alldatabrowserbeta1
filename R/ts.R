@@ -93,7 +93,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
       nameOfSeries<-c(nameOfSeries,loca)
       segment     <-c(segment,k)
       typeOfSeries<-c(typeOfSeries,"prim")
-      globalUnit  <-c(globalUnit,unit)
+      globalUnit  <-c(globalUnit,unique(unit))
     }
     
     # Popis primarnich casovych rad v 1. cyklu    
@@ -253,7 +253,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
       nameOfSeries<-c(nameOfSeries,loca)
       segment     <-c(segment,k)
       typeOfSeries<-c(typeOfSeries,"aggr")
-      globalUnit  <-c(globalUnit,aggr$unit)
+      globalUnit  <-c(globalUnit,unique(aggr$unit))
     }
     
     # Popis agregovanych casovych rad ve 2. cyklu
@@ -387,7 +387,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
         nameOfSeries<-c(nameOfSeries,loca)
         segment     <-c(segment,1)
         typeOfSeries<-c(typeOfSeries,"prim_trend") 
-        globalUnit  <-c(globalUnit,unit)
+        globalUnit  <-c(globalUnit,unique(unit))
       }
     }
     
@@ -510,7 +510,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
         nameOfSeries<-c(nameOfSeries,loca)
         segment     <-c(segment,1)
         typeOfSeries<-c(typeOfSeries,"aggr_trend")
-        globalUnit  <-c(globalUnit,aggr$unit)
+        globalUnit  <-c(globalUnit,unique(aggr$unit))
       }
     }
     
@@ -596,7 +596,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     nameOfSeries<-c(nameOfSeries,"Total")
     segment     <-c(segment,k)
     typeOfSeries<-c(typeOfSeries,"whol")
-    globalUnit  <-c(globalUnit,aggr$unit)
+    globalUnit  <-c(globalUnit,unique(aggr$unit))
     
     if (j!=1) {
       if ((aggr$dateTime[j]-aggr$dateTime[j-1])>=hole) {
