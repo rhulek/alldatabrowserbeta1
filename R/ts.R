@@ -73,7 +73,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     # j cyklus bezi pres jednotliva mereni
     for (j in 1:length(records[[i]]$values)) {
       if (j!=1) {
-        if ((dateTime[j]-dateTime[j-1])>=hole) {
+        if ((dateTime[j]-dateTime[j-1])>hole) {
           k<-k+1
         }
       }
@@ -232,7 +232,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     # j cyklus bezi pres jednotliva mereni
     for (j in 1:nrow(aggr)) {
       if (j!=1) {
-        if ((aggr$dateTime[j]-aggr$dateTime[j-1])>=hole) {
+        if ((aggr$dateTime[j]-aggr$dateTime[j-1])>hole) {
           k<-k+1
         }
       }
@@ -378,7 +378,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     }
     
     # Popis trendovych krivek v 3. cyklu.    
-    if (max(c(hole,dateTime[-1]-dateTime[-length(records[[i]]$values)]))<hole) {
+    if (max(c(hole,dateTime[-1]-dateTime[-length(records[[i]]$values)]))<=hole) {
       parameterNames<-c("slope",
                         "intercept")
       
@@ -471,9 +471,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
       hole<-0
     }
     
-    return(list(nrow(aggr),hole))
-    
-    if ((max(c(hole,aggr$dateTime[-1]-aggr$dateTime[-nrow(aggr)]))>=hole)|(nrow(aggr)<3)) {
+    if ((max(c(hole,aggr$dateTime[-1]-aggr$dateTime[-nrow(aggr)]))>hole)|(nrow(aggr)<3)) {
       series<-NA
     } else {
       curve<-data.frame(as.Date(as.numeric(genplot(aggr$centralValue,aggr$dateTime,n=20,distr="lnorm",plot=FALSE)$belt[1,]),origin="1970-01-01"),
@@ -504,7 +502,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     }
     
     # Popis trendovych agregovanych krivek ve 4. cyklu.    
-    if (max(c(hole,aggr$dateTime[-1]-aggr$dateTime[-nrow(aggr)]))<hole) {
+    if (max(c(hole,aggr$dateTime[-1]-aggr$dateTime[-nrow(aggr)]))<=hole) {
       parameterNames<-c("slope",
                         "intercept")
       
@@ -581,7 +579,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     globalUnit  <-c(globalUnit,unique(aggr$unit))
     
     if (j!=1) {
-      if ((aggr$dateTime[j]-aggr$dateTime[j-1])>=hole) {
+      if ((aggr$dateTime[j]-aggr$dateTime[j-1])>hole) {
         k<-k+1
       }
     }
