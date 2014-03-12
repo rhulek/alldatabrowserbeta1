@@ -201,7 +201,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     
     # Jednotky musi byt stejne
     if (length(unique(unit))>1) {
-      stop("Units of some records differ! (1)")
+      stop("Units of some records differ!")
     } else {
       unit<-unique(unit)
     }
@@ -445,7 +445,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     
     # Jednotky musi byt stejne
     if (length(unique(unit))>1) {
-      stop("Units of some records differ! (2)")
+      stop("Units of some records differ!")
     } else {
       unit<-unique(unit)
     }
@@ -524,9 +524,11 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
   valu<-valu[order(data)]
   data<-data[order(data)]
   
+  return(unique(globalUnit))
+  
   # Jednotky musi byt stejne
   if (length(unique(unit))>1) {
-    stop("Units of some records differ! (3)")
+    stop("Units of some records differ!")
   } else {
     unit<-unique(unit)
   }
