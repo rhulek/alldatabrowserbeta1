@@ -146,8 +146,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     }
   }
   
-  return(list(cenValue,botValue,topValue,dateOfPoint,nameOfSeries,segment,typeOfSeries,seriesDescription,parameterDescription,valueDescription))
-  
+    
   ## Druhe opakovani cyklu - vypocet rad agregaci
   
   # Vyber agregacnich funkci
@@ -239,67 +238,80 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     
     # j cyklus bezi pres jednotliva mereni
     for (j in 1:nrow(aggr)) {
-      aggValue<-list(label=paste0(loca,"_aggr"),
-                     n=aggr$n[j],
-                     nUnderLOQ=aggr$nUnderLOQ[j],
-                     unit=aggr$unit[j],
-                     centralValue=aggr$centralValue[j],
-                     centralValueType=aggr$centralValueType[j],
-                     whiskerTopValue=aggr$whiskerTopValue[j],
-                     whiskerBottomValue=aggr$whiskerBottomValue[j],
-                     whiskerType=aggr$whiskerType[j],
-                     dateTimeString=aggr$dateTimeString[j]);
-      
-      if (j==1) {
-        values<-as.list(c(values,list(aggValue)))
-      } else {
-        if ((aggr$dateTime[j]-aggr$dateTime[j-1])<hole) {
-          values<-as.list(c(values,list(aggValue)))
-        } else {
-          timeSeriesRecord<-list(values=values,label=paste0("site_aggr",i," part",k))
+      if (j!=1) {
+        if ((aggr$dateTime[j]-aggr$dateTime[j-1])>=hole) {
           k<-k+1
-          series<-as.list(c(series,list(timeSeriesRecord)))
-          values<-list(aggValue)
         }
       }
+      # Vystupni promenne
+      cenValue    <-c(cenValue,aggr$centralValue[j])
+      botValue    <-c(botValue,aggr$whiskerBottomValue[j])
+      topValue    <-c(botValue,aggr$whiskerTopValue[j])
+      dateOfPoint <-c(dateOfPoint,aggr$dateTimeString[j])
+      nameOfSeries<-c(nameOfSeries,loca)
+      segment     <-c(segment,k)
+      typeOfSeries<-c(typeOfSeries,"aggr")  
     }
-    timeSeriesRecord<-list(values=values,label=paste0("site_aggr",i," part",k))
-    series<-as.list(c(series,list(timeSeriesRecord)))
     
     # Popis agregovanych casovych rad ve 2. cyklu
     if (k==1) {
       res<-genstatistic(aggr$centralValue,aggr$dateTime)$res
       
-      trendSummary<-list(delta=res$delta,
-                         mannKendall=res$"Mann-Kendall",
-                         mannKendallP=res$MKp,
-                         daniels=res$Daniels,
-                         danielsP=res$Dp,
-                         mean=res$mean,
-                         sd=res$sd,
-                         geomean=res$"geom. mean",
-                         gsd=res$"geom. sd",
-                         median=res$median,
-                         min=res$min,
-                         max=res$max,
-                         perc5=quantile05(aggr$centralValue),
-                         perc25=quantile25(aggr$centralValue),
-                         perc75=quantile75(aggr$centralValue),
-                         perc95=quantile95(aggr$centralValue),
-                         geoMean95CIUpperBound=res$"geom. mean"*res$"geom. sd"^qnorm(0.975),
-                         geoMean95CILowerBound=res$"geom. mean"*res$"geom. sd"^qnorm(0.025),
-                         mean95CIUpperBound=res$mean+qnorm(0.975)*res$sd,
-                         mean95CILowerBound=res$mean+qnorm(0.025)*res$sd)
+      parameterNames<-c("delta",
+                        "mannKendall",
+                        "mannKendallP",
+                        "daniels",
+                        "danielsP",
+                        "mean",
+                        "sd",
+                        "geomean",
+                        "gsd",
+                        "median",
+                        "min",
+                        "max",
+                        "perc5",
+                        "perc25",
+                        "perc75",
+                        "perc95",
+                        "geoMean95CIUpperBound",
+                        "geoMean95CILowerBound",
+                        "mean95CIUpperBound",
+                        "mean95CILowerBound")
+      
+      parameterValues<-list(res$delta,
+                         res$"Mann-Kendall",
+                         res$MKp,
+                         res$Daniels,
+                         res$Dp,
+                         res$mean,
+                         res$sd,
+                         res$"geom. mean",
+                         res$"geom. sd",
+                         res$median,
+                         res$min,
+                         res$max,
+                         quantile05(aggr$centralValue),
+                         quantile25(aggr$centralValue),
+                         quantile75(aggr$centralValue),
+                         quantile95(aggr$centralValue),
+                         res$"geom. mean"*res$"geom. sd"^qnorm(0.975),
+                         res$"geom. mean"*res$"geom. sd"^qnorm(0.025),
+                         res$mean+qnorm(0.975)*res$sd,
+                         res$mean+qnorm(0.025)*res$sd)
+      
+      seriesDescription<-c(seriesDescription,rep(loca,length(parameterNames)))
+      parameterDescription<-c(parameterDescription,parameterNames)
+      valueDescription<-c(valueDescription,parameterValues)
     }
-    else {
-      trendSummary<-NA
-    }
+
     
     seriesSet<-list(series=series,trendSummary=trendSummary,label=paste0("site_aggr",i));
     seriesSets<-as.list(c(seriesSets,list(seriesSet)))
     label<-paste0("Site_aggr",i)
     labels<-as.list(c(labels,list(label)))
   }
+
+  return(list(cenValue,botValue,topValue,dateOfPoint,nameOfSeries,segment,typeOfSeries,seriesDescription,parameterDescription,valueDescription))
   
   
   ## Treti opakovani cyklu - vypocet trendu primarnich rad
@@ -662,5 +674,5 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
   
   casovani<-c(casovani,"Konec",as.character(format(Sys.time(), "%H:%M:%OS3")))
   
-  return(list(0))
+  return(list(cenValue,botValue,topValue,dateOfPoint,nameOfSeries,segment,typeOfSeries,seriesDescription,parameterDescription,valueDescription))
 }
