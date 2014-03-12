@@ -471,7 +471,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
       hole<-0
     }
     
-    return(list(nrow(aggr,hole)))
+    return(list(nrow(aggr),hole))
     
     if ((max(c(hole,aggr$dateTime[-1]-aggr$dateTime[-nrow(aggr)]))>=hole)|(nrow(aggr)<3)) {
       series<-NA
