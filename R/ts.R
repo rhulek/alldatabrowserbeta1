@@ -532,7 +532,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
   ## Vypocet prostorove agregovane rady z jednotlivych rocnich agregaci (jen jednou pro cely datovy soubor)
   valu<-cenValue
   data<-dateOfPoint
-  unit<-golbalUnit
+  unit<-globalUnit
   
   return(list(length(cenValue),length(dateOfPoint),length(golbalUnit)))
   
