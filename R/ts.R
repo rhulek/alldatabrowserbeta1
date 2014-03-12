@@ -206,8 +206,6 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
       unit<-unique(unit)
     }
     
-    return(unit)
-    
     # Rocni agregace do noveho data.frame aggr
     year<-gendate(substr(dateTimeString,1,4))
     aggr<-data.frame(aggregate(valu,by=list(year),FUN=f1)[,2],
@@ -248,6 +246,8 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
       typeOfSeries<-c(typeOfSeries,"aggr")
       globalUnit  <-c(globalUnit,unique(aggr$unit))
     }
+    
+    return(aggr$unit)
     
     # Popis agregovanych casovych rad ve 2. cyklu
     if (k==1) {
