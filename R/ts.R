@@ -86,7 +86,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
       nameOfSeries<-c(nameOfSeries,loca)
       segment     <-c(segment,k)
       typeOfSeries<-c(typeOfSeries,"prim")
-      globalUnit  <-c(globalUnit,unique(unit))
+      globalUnit  <-c(globalUnit,as.character(unique(unit)))
     }
     
     # Popis primarnich casovych rad v 1. cyklu    
@@ -373,7 +373,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
         nameOfSeries<-c(nameOfSeries,loca)
         segment     <-c(segment,1)
         typeOfSeries<-c(typeOfSeries,"prim_trend") 
-        globalUnit  <-c(globalUnit,unique(unit))
+        globalUnit  <-c(globalUnit,as.character(unique(unit)))
       }
     }
     
@@ -497,7 +497,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
         nameOfSeries<-c(nameOfSeries,loca)
         segment     <-c(segment,1)
         typeOfSeries<-c(typeOfSeries,"aggr_trend")
-        globalUnit  <-c(globalUnit,unique(aggr$unit))
+        globalUnit  <-c(globalUnit,as.character(unique(aggr$unit)))
       }
     }
     
