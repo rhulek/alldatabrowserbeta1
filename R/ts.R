@@ -12,6 +12,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
   nameOfSeries<-c()
   segment<-c()
   typeOfSeries<-c()
+  globalUnit<-c()
   
   seriesDescription<-c()
   parameterDescription<-c()
