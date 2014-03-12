@@ -453,7 +453,6 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     # Rocni agregace do noveho data.frame aggr
     year<-gendate(substr(dateTimeString,1,4))
     
-    return(year)
     aggr<-data.frame(aggregate(valu,by=list(year),FUN=f1)[,2],
                      as.character(unit),
                      centralValueType,
@@ -471,6 +470,8 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     } else {
       hole<-0
     }
+    
+    return(list(nrow(aggr,hole)))
     
     if ((max(c(hole,aggr$dateTime[-1]-aggr$dateTime[-nrow(aggr)]))>=hole)|(nrow(aggr)<3)) {
       series<-NA
