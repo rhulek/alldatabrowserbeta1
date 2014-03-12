@@ -209,7 +209,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     # Rocni agregace do noveho data.frame aggr
     year<-gendate(substr(dateTimeString,1,4))
     aggr<-data.frame(aggregate(valu,by=list(year),FUN=f1)[,2],
-                     unit,
+                     as.character(unit),
                      centralValueType,
                      aggregate(valu,by=list(year),FUN=f3)[,2],
                      aggregate(valu,by=list(year),FUN=f2)[,2],
@@ -453,7 +453,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     # Rocni agregace do noveho data.frame aggr
     year<-gendate(substr(dateTimeString,1,4))
     aggr<-data.frame(aggregate(valu,by=list(year),FUN=f1)[,2],
-                     unit,
+                     as.character(unit),
                      centralValueType,
                      aggregate(valu,by=list(year),FUN=f3)[,2],
                      aggregate(valu,by=list(year),FUN=f2)[,2],
@@ -547,7 +547,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
   # Rocni agregace do noveho data.frame aggr
   year<-gendate(substr(data,1,4))
   aggr<-data.frame(aggregate(valu,by=list(year),FUN=f1)[,2],
-                   unit,
+                   as.character(unit),
                    centralValueType,
                    aggregate(valu,by=list(year),FUN=f3)[,2],
                    aggregate(valu,by=list(year),FUN=f2)[,2],
