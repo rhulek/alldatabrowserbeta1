@@ -92,6 +92,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
       nameOfSeries<-c(nameOfSeries,loca)
       segment     <-c(segment,k)
       typeOfSeries<-c(typeOfSeries,"prim")
+      globalUnit  <-c(globalUnit,unit)
     }
     
     # Popis primarnich casovych rad v 1. cyklu    
@@ -250,7 +251,8 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
       dateOfPoint <-c(dateOfPoint,aggr$dateTimeString[j])
       nameOfSeries<-c(nameOfSeries,loca)
       segment     <-c(segment,k)
-      typeOfSeries<-c(typeOfSeries,"aggr")  
+      typeOfSeries<-c(typeOfSeries,"aggr")
+      globalUnit  <-c(globalUnit,aggr$unit)
     }
     
     # Popis agregovanych casovych rad ve 2. cyklu
@@ -376,6 +378,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
                  whiskerBottomValue=curve$lower[j],
                  dateTimeString=as.character(curve$belt[j]))
         
+        # Vystupni promenne
         cenValue    <-c(cenValue,curve$line[j])
         botValue    <-c(botValue,curve$lower[j])
         topValue    <-c(botValue,curve$upper[j])
@@ -383,6 +386,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
         nameOfSeries<-c(nameOfSeries,loca)
         segment     <-c(segment,1)
         typeOfSeries<-c(typeOfSeries,"prim_trend") 
+        globalUnit  <-c(globalUnit,unit)
       }
     }
     
@@ -497,13 +501,15 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
       
       # j cyklus bezi pres jednotlive body krivky
       for (j in 1:nrow(curve)) {
+        # Vystupni promenne
         cenValue    <-c(cenValue,curve$line[j])
         botValue    <-c(botValue,curve$lower[j])
         topValue    <-c(botValue,curve$upper[j])
         dateOfPoint <-c(dateOfPoint,as.character(curve$belt[j]))
         nameOfSeries<-c(nameOfSeries,loca)
         segment     <-c(segment,1)
-        typeOfSeries<-c(typeOfSeries,"aggr_trend") 
+        typeOfSeries<-c(typeOfSeries,"aggr_trend")
+        globalUnit  <-c(globalUnit,aggr$unit)
       }
     }
     
@@ -523,23 +529,11 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
   
 
   ## Vypocet prostorove agregovane rady z jednotlivych rocnich agregaci (jen jednou pro cely datovy soubor)
-  numofrows<-length(seriesSets)/4
-  valu<-c()
-  data<-c()
-  unit<-c()
+  valu<-cenValue
+  data<-dateOfPoint
+  unit<-golbalUnit
   
-  for (i in 1:numofrows) {
-    lengthofrow<-length(seriesSets[[numofrows+i]]$series[[1]]$values)
-    
-    casovani<-c(casovani,paste0("5. cyklus, ",i,". iterace"),as.character(format(Sys.time(), "%H:%M:%OS3")))
-    
-    
-    for (j in 1:lengthofrow) {
-      valu<-c(valu,seriesSets[[numofrows+i]]$series[[1]]$values[[j]]$centralValue)
-      data<-c(data,as.character(seriesSets[[numofrows+i]]$series[[1]]$values[[j]]$dateTimeString))
-      unit<-c(unit,as.character(seriesSets[[numofrows+i]]$series[[1]]$values[[j]]$unit))
-    }    
-  }
+  return(list(length(cenValue),length(dateOfPoint),length(golbalUnit)))
   
   data<-as.Date(data)
   valu<-as.numeric(valu)
@@ -593,13 +587,15 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
   
   # j cyklus bezi pres jednotliva mereni
   for (j in 1:nrow(aggr)) {
+    # Vystupni promenne
     cenValue    <-c(cenValue,aggr$centralValue[j])
     botValue    <-c(botValue,aggr$whiskerBottomValue[j])
     topValue    <-c(botValue,aggr$whiskerTopValue[j])
     dateOfPoint <-c(dateOfPoint,aggr$dateTimeString[j])
     nameOfSeries<-c(nameOfSeries,"Total")
     segment     <-c(segment,k)
-    typeOfSeries<-c(typeOfSeries,"whol") 
+    typeOfSeries<-c(typeOfSeries,"whol")
+    globalUnit  <-c(globalUnit,aggr$unit)
     
     if (j!=1) {
       if ((aggr$dateTime[j]-aggr$dateTime[j-1])>=hole) {
@@ -608,7 +604,6 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     }
   }
 
-  
   # Popis celkove agregovane rady
   if (k==1) {
     res<-genstatistic(aggr$centralValue,aggr$dateTime)$res
