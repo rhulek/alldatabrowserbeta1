@@ -18,12 +18,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
   parameterDescription<-c()
   valueDescription<-c()
     
-  ## Celkova obalka
-  allSeries<-list()
-  
   ## Prvni opakovani cyklu - primarni casove rady
-  seriesSets<-list()
-  labels<-list()
   # i cyklus bezi pres sites
   for (i in 1:length(records)) {
     loca<-as.character(records[[i]]$rowLabel)
@@ -74,8 +69,6 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     
     # k udava poradi segmentu jedne casove rady
     k<-1
-    values<-list()
-    series<-list()
     
     # j cyklus bezi pres jednotliva mereni
     for (j in 1:length(records[[i]]$values)) {
@@ -235,8 +228,6 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     
     # k udava poradi segmentu jedne casove rady
     k<-1
-    values<-list()
-    series<-list()
     
     # j cyklus bezi pres jednotliva mereni
     for (j in 1:nrow(aggr)) {
@@ -281,7 +272,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
                         "mean95CIUpperBound",
                         "mean95CILowerBound")
       
-      parameterValues<-list(res$delta,
+      parameterValues<-c(res$delta,
                          res$"Mann-Kendall",
                          res$MKp,
                          res$Daniels,
@@ -373,11 +364,6 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
       
       # j cyklus bezi pres jednotlive body krivky
       for (j in 1:nrow(curve)) {
-        cv<-list(label=loca,
-                 centralValue=curve$line[j],
-                 whiskerTopValue=curve$upper[j],
-                 whiskerBottomValue=curve$lower[j],
-                 dateTimeString=as.character(curve$belt[j]))
         
         # Vystupni promenne
         cenValue    <-c(cenValue,curve$line[j])
@@ -396,8 +382,8 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
       parameterNames<-c("slope",
                         "intercept")
       
-      parameterValues<-list(genplot(valu,dateTime,n=20,distr="lnorm",plot=FALSE)$slope,
-                            genplot(valu,dateTime,n=20,distr="lnorm",plot=FALSE)$intercept)
+      parameterValues<-c(genplot(valu,dateTime,n=20,distr="lnorm",plot=FALSE)$slope,
+                         genplot(valu,dateTime,n=20,distr="lnorm",plot=FALSE)$intercept)
       
       seriesDescription<-c(seriesDescription,rep(loca,length(parameterNames)))
       parameterDescription<-c(parameterDescription,parameterNames)
@@ -519,8 +505,8 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
       parameterNames<-c("slope",
                         "intercept")
       
-      parameterValues<-list(genplot(valu,aggr$dateTime,n=20,distr="lnorm",plot=FALSE)$slope,
-                            genplot(valu,aggr$dateTime,n=20,distr="lnorm",plot=FALSE)$intercept)
+      parameterValues<-c(genplot(valu,aggr$dateTime,n=20,distr="lnorm",plot=FALSE)$slope,
+                         genplot(valu,aggr$dateTime,n=20,distr="lnorm",plot=FALSE)$intercept)
       
       seriesDescription<-c(seriesDescription,rep(loca,length(parameterNames)))
       parameterDescription<-c(parameterDescription,parameterNames)
@@ -530,14 +516,9 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
   
 
   ## Vypocet prostorove agregovane rady z jednotlivych rocnich agregaci (jen jednou pro cely datovy soubor)
-  valu<-cenValue
-  data<-dateOfPoint
+  valu<-as.numeric(cenValue)
+  data<-as.Date(dateOfPoint)
   unit<-globalUnit
-  
-  return(list(length(cenValue),length(dateOfPoint),length(globalUnit)))
-  
-  data<-as.Date(data)
-  valu<-as.numeric(valu)
   
   unit<-unit[order(data)]
   valu<-valu[order(data)]
@@ -583,8 +564,6 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
   
   # k udava poradi segmentu jedne casove rady
   k<-1
-  values<-list()
-  series<-list()
   
   # j cyklus bezi pres jednotliva mereni
   for (j in 1:nrow(aggr)) {
@@ -630,7 +609,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
                       "mean95CIUpperBound",
                       "mean95CILowerBound")
     
-    parameterValues<-list(res$delta,
+    parameterValues<-c(res$delta,
                           res$"Mann-Kendall",
                           res$MKp,
                           res$Daniels,
