@@ -524,7 +524,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
   valu<-valu[order(data)]
   data<-data[order(data)]
   
-  return(unique(globalUnit))
+  return(globalUnit)
   
   # Jednotky musi byt stejne
   if (length(unique(unit))>1) {
