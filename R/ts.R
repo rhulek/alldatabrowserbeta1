@@ -107,7 +107,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
       dateOfPoint <-c(dateOfPoint,dateTimeString[j])
       nameOfSeries<-c(nameOfSeries,loca)
       segment     <-c(segment,k)
-      typeOfSeries<-c(,"primary")
+      typeOfSeries<-c(typeOfSeries,"primary")
     }
     
     timeSeriesRecord<-list(values=values,label=paste0("site",i," part",k))
