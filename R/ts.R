@@ -99,21 +99,23 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
           values<-list(cv)
         }
       }
+      
+      # Vystupni promenne
+      cenValue    <-c(cenValue,valu[j])
+      botValue    <-c(botValue,NA)
+      topValue    <-c(botValue,NA)
+      dateOfPoint <-c(dateOfPoint,dateTimeString[j])
+      nameOfSeries<-c(nameOfSeries,loca)
+      segment     <-c(segment,k)
+      typeOfSeries<-c(,"primary")
     }
     
     timeSeriesRecord<-list(values=values,label=paste0("site",i," part",k))
     series<-as.list(c(series,list(timeSeriesRecord)))
     
-    cenValue    <-c(cenValue,values$value)
-    botValue    <-c(botValue,rep(NA,length(values)))
-    topValue    <-c(botValue,rep(NA,length(values)))
-                    
-    return(list(cenValue,botValue,topValue))
+   return(list(cenValue,botValue,topValue,dateOfPoint,nameOfSeries,segment,typeOfSeries))
     
-    dateOfPoint <-
-    nameOfSeries<-
-    segment     <-
-    typeOfSeries<-
+
     
     # Popis primarnich casovych rad v 1. cyklu    
     if (k==1) {
