@@ -1,6 +1,6 @@
 ts<-function(records,centralValueType="median",whiskerValueType="5_95",transformationType="none") {
   
-  return("hovno hori")
+  return("hovno hori verze 2")
   
   casovani<-c()
   casovani<-c(casovani,"Pred nactenim knihovny",as.character(format(Sys.time(), "%H:%M:%OS3")))
