@@ -246,7 +246,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
       typeOfSeries<-c(typeOfSeries,"aggr")
       globalUnit  <-c(globalUnit,unique(aggr$unit))
       
-      return(unique(aggr$unit))
+      return(globalUnit)
     }
     
     # Popis agregovanych casovych rad ve 2. cyklu
