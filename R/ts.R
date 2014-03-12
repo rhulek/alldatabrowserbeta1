@@ -576,7 +576,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     nameOfSeries<-c(nameOfSeries,"Total")
     segment     <-c(segment,k)
     typeOfSeries<-c(typeOfSeries,"whol")
-    globalUnit  <-c(globalUnit,unique(aggr$unit))
+    globalUnit  <-c(globalUnit,as.character(unique(aggr$unit)))
     
     if (j!=1) {
       if ((aggr$dateTime[j]-aggr$dateTime[j-1])>hole) {
