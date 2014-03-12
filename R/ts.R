@@ -78,25 +78,9 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     
     # j cyklus bezi pres jednotliva mereni
     for (j in 1:length(records[[i]]$values)) {
-      cv<-list(value=valu[j],
-               loqValue=loqValue[j],
-               label=loca,
-               loqMethodCode=loqMethodCode[j],
-               unit=unit[j],
-               dateTime=dateTime[j],
-               dateTimeString=dateTimeString[j],
-               timeLength=length(records[[i]]$values));
-      
-      if (j==1) {
-        values<-as.list(c(values,list(cv)))
-      } else {
-        if ((dateTime[j]-dateTime[j-1])<hole) {
-          values<-as.list(c(values,list(cv)))
-        } else {
-          timeSeriesRecord<-list(values=values,label=paste0("site",i," part",k))
+      if (j!=1) {
+        if ((dateTime[j]-dateTime[j-1])>=hole) {
           k<-k+1
-          series<-as.list(c(series,list(timeSeriesRecord)))
-          values<-list(cv)
         }
       }
       
@@ -110,48 +94,59 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
       typeOfSeries<-c(typeOfSeries,"primary")
     }
     
-    timeSeriesRecord<-list(values=values,label=paste0("site",i," part",k))
-    series<-as.list(c(series,list(timeSeriesRecord)))
-    
-   return(list(cenValue,botValue,topValue,dateOfPoint,nameOfSeries,segment,typeOfSeries))
-    
-
-    
     # Popis primarnich casovych rad v 1. cyklu    
     if (k==1) {
       res<-genstatistic(valu,dateTime)$res
       
-      trendSummary<-list(delta=res$delta,
-                         mannKendall=res$"Mann-Kendall",
-                         mannKendallP=res$MKp,
-                         daniels=res$Daniels,
-                         danielsP=res$Dp,
-                         mean=res$mean,
-                         sd=res$sd,
-                         geomean=res$"geom. mean",
-                         gsd=res$"geom. sd",
-                         median=res$median,
-                         min=res$min,
-                         max=res$max,
-                         perc5=quantile05(valu),
-                         perc25=quantile25(valu),
-                         perc75=quantile75(valu),
-                         perc95=quantile95(valu),
-                         geoMean95CIUpperBound=res$"geom. mean"*res$"geom. sd"^qnorm(0.975),
-                         geoMean95CILowerBound=res$"geom. mean"*res$"geom. sd"^qnorm(0.025),
-                         mean95CIUpperBound=res$mean+qnorm(0.975)*res$sd,
-                         mean95CILowerBound=res$mean+qnorm(0.025)*res$sd)
+      parameterNames<-c("delta",
+                        "mannKendall",
+                        "mannKendallP",
+                        "daniels",
+                        "danielsP",
+                        "mean",
+                        "sd",
+                        "geomean",
+                        "gsd",
+                        "median",
+                        "min",
+                        "max",
+                        "perc5",
+                        "perc25",
+                        "perc75",
+                        "perc95",
+                        "geoMean95CIUpperBound",
+                        "geoMean95CILowerBound",
+                        "mean95CIUpperBound",
+                        "mean95CILowerBound")
+      
+      parameterValues<-c(res$delta,
+                         res$"Mann-Kendall",
+                         res$MKp,
+                         res$Daniels,
+                         res$Dp,
+                         res$mean,
+                         res$sd,
+                         res$"geom. mean",
+                         res$"geom. sd",
+                         res$median,
+                         res$min,
+                         res$max,
+                         quantile05(valu),
+                         quantile25(valu),
+                         quantile75(valu),
+                         quantile95(valu),
+                         res$"geom. mean"*res$"geom. sd"^qnorm(0.975),
+                         res$"geom. mean"*res$"geom. sd"^qnorm(0.025),
+                         res$mean+qnorm(0.975)*res$sd,
+                         res$mean+qnorm(0.025)*res$sd)
+      
+      seriesDescription<-c(seriesDescription,rep(loca,length(parameterNames)))
+      parameterDescription<-c(parameterDescription,parameterNames)
+      valueDescription<-c(valueDescription,parameterValues)
     }
-    else {
-      trendSummary<-NA
-    }
-    
-    seriesSet<-list(series=series,trendSummary=trendSummary,label=paste0("site",i));
-    seriesSets<-as.list(c(seriesSets,list(seriesSet)))
-    label<-paste0("Site",i)
-    labels<-as.list(c(labels,list(label)))
   }
   
+  return(list(cenValue,botValue,topValue,dateOfPoint,nameOfSeries,segment,typeOfSeries,seriesDescription,parameterDescription,valueDescription))
   
   ## Druhe opakovani cyklu - vypocet rad agregaci
   
