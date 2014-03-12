@@ -303,12 +303,6 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
       parameterDescription<-c(parameterDescription,parameterNames)
       valueDescription<-c(valueDescription,parameterValues)
     }
-
-    
-    seriesSet<-list(series=series,trendSummary=trendSummary,label=paste0("site_aggr",i));
-    seriesSets<-as.list(c(seriesSets,list(seriesSet)))
-    label<-paste0("Site_aggr",i)
-    labels<-as.list(c(labels,list(label)))
   }
 
   return(list(cenValue,botValue,topValue,dateOfPoint,nameOfSeries,segment,typeOfSeries,seriesDescription,parameterDescription,valueDescription))
