@@ -299,7 +299,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     }
   }
 
-  return(globalUnit)
+
   ## Treti opakovani cyklu - vypocet trendu primarnich rad
   
   # i cyklus bezi pres sites
