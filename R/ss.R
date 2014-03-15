@@ -35,7 +35,7 @@ ss<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     
     # Nahrada LoQ polovinami limitu
     valu<-value
-    #valu[which(is.na(valu)&loqMethodCode=="INS")]<-loqValue[which(is.na(valu))]*1/2
+    valu[which(is.na(valu)&loqMethodCode=="INS")]<-loqValue[which(is.na(valu))]*1/2
     
     # Logaritmicka transformace
     if (transformationType=="log") {
