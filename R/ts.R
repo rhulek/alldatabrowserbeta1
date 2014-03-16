@@ -382,8 +382,6 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
       parameterNames<-c("slope",
                         "intercept")
       
-      return(list(valu,dateTime))
-      
       parameterValues<-c(genplot(valu,dateTime,n=20,distr="lnorm",plot=FALSE)$slope,
                          genplot(valu,dateTime,n=20,distr="lnorm",plot=FALSE)$intercept)
       
@@ -508,8 +506,8 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
       parameterNames<-c("slope",
                         "intercept")
       
-      parameterValues<-c(genplot(valu,aggr$dateTime,n=20,distr="lnorm",plot=FALSE)$slope,
-                         genplot(valu,aggr$dateTime,n=20,distr="lnorm",plot=FALSE)$intercept)
+      parameterValues<-c(genplot(aggr$centralValue,aggr$dateTime,n=20,distr="lnorm",plot=FALSE)$slope,
+                         genplot(aggr$centralValue,aggr$dateTime,n=20,distr="lnorm",plot=FALSE)$intercept)
       
       seriesDescription<-c(seriesDescription,rep(loca,length(parameterNames)))
       parameterDescription<-c(parameterDescription,parameterNames)
