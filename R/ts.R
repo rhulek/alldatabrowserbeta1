@@ -349,6 +349,9 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     if (max(c(hole,dateTime[-1]-dateTime[-length(records[[i]]$values)]))>hole|(length(dateTime)<3)) { # Hole added to the vector to avoid problems with vector of length 1.
       series<-NA
     } else {
+      
+      return(list(valu,dateTime))
+      
       curve<-data.frame(as.Date(as.numeric(genplot(valu,dateTime,n=20,distr="lnorm",plot=FALSE)$belt[1,]),origin="1970-01-01"),
                         as.numeric(genplot(valu,dateTime,n=20,distr="lnorm",plot=FALSE)$line[1,]),
                         as.numeric(genplot(valu,dateTime,n=20,distr="lnorm",plot=FALSE)$lower[1,]),
