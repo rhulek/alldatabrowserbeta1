@@ -5,8 +5,6 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
   
   library(genasis)
   
-  return("nic")
-  
   cenValue<-c()
   topValue<-c()
   botValue<-c()
@@ -92,55 +90,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     }
     
     # Popis primarnich casovych rad v 1. cyklu    
-    if (k==1) {
-      res<-genstatistic(valu,dateTime)$res
-      
-      parameterNames<-c("delta",
-                        "mannKendall",
-                        "mannKendallP",
-                        "daniels",
-                        "danielsP",
-                        "mean",
-                        "sd",
-                        "geomean",
-                        "gsd",
-                        "median",
-                        "min",
-                        "max",
-                        "perc5",
-                        "perc25",
-                        "perc75",
-                        "perc95",
-                        "geoMean95CIUpperBound",
-                        "geoMean95CILowerBound",
-                        "mean95CIUpperBound",
-                        "mean95CILowerBound")
-      
-      parameterValues<-c(res$delta,
-                         res$"Mann-Kendall",
-                         res$MKp,
-                         res$Daniels,
-                         res$Dp,
-                         res$mean,
-                         res$sd,
-                         res$"geom. mean",
-                         res$"geom. sd",
-                         res$median,
-                         res$min,
-                         res$max,
-                         quantile05(valu),
-                         quantile25(valu),
-                         quantile75(valu),
-                         quantile95(valu),
-                         res$"geom. mean"*res$"geom. sd"^qnorm(0.975),
-                         res$"geom. mean"*res$"geom. sd"^qnorm(0.025),
-                         res$mean+qnorm(0.975)*res$sd,
-                         res$mean+qnorm(0.025)*res$sd)
-      
-      seriesDescription<-c(seriesDescription,rep(loca,length(parameterNames)))
-      parameterDescription<-c(parameterDescription,parameterNames)
-      valueDescription<-c(valueDescription,parameterValues)
-    }
+
   }
   
     
