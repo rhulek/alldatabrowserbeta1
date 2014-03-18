@@ -2,6 +2,10 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
   
   library(genasis)
   
+  ih (length(records)==1) {
+    records<-list(records)
+  }
+  
   cenValue<-c()
   topValue<-c()
   botValue<-c()
