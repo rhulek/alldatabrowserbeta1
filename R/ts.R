@@ -142,7 +142,165 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
   }
   
     
+  ## Druhe opakovani cyklu - vypocet rad agregaci
   
+  # Vyber agregacnich funkci
+  whisk<-c("5_95","25_75","min_max","2iq","ci")
+  whisl<-c("quantile05","quantile25","min","iql","cil")
+  whisu<-c("quantile95","quantile75","max","iqu","ciu")
+  
+  centv<-c("mean","median","geomean")
+  centf<-c("arimean","quantile50","geomean")
+  
+  f1<-centf[which(centv==centralValueType)]
+  f2<-whisl[which(whisk==whiskerValueType)]
+  f3<-whisu[which(whisk==whiskerValueType)]
+  
+  # i cyklus bezi pres sites
+  for (i in 1:length(records)) {
+    loca<-as.character(records[[i]]$rowLabel)
+    value         <-c()
+    loqValue      <-c()
+    loqMethodCode <-c()
+    unit          <-c()
+    dateTime      <-c()
+    dateTimeString<-c()
+    timeLength    <-c()
+    
+    casovani<-c(casovani,paste0("2. cyklus, ",i,". iterace"),as.character(format(Sys.time(), "%H:%M:%OS3")))
+    
+    
+    for (j in 1:length(records[[i]]$values)) {
+      value         <-c(value,         records[[i]]$values[[j]]$value)
+      loqValue      <-c(loqValue,      records[[i]]$values[[j]]$loqValue)
+      loqMethodCode <-c(loqMethodCode, records[[i]]$values[[j]]$loqMethodCode)
+      unit          <-c(unit,          records[[i]]$values[[j]]$unit)
+      dateTime      <-c(dateTime,      records[[i]]$values[[j]]$dateTime)
+      dateTimeString<-c(dateTimeString,records[[i]]$values[[j]]$dateTimeString)
+      timeLength    <-c(timeLength,    records[[i]]$values[[j]]$timeLength)
+    }
+    
+    dateTime<-as.Date(dateTimeString)
+    
+    value         <-value[order(dateTimeString)]
+    loqValue      <-loqValue[order(dateTimeString)]
+    loqMethodCode <-loqMethodCode[order(dateTimeString)]
+    unit          <-unit[order(dateTimeString)]
+    dateTime      <-dateTime[order(dateTimeString)]
+    timeLength    <-timeLength[order(dateTimeString)]
+    dateTimeString<-dateTimeString[order(dateTimeString)]
+    
+    # Nahrada LoQ (v promenne valu budou hodnoty vstupujici do vypoctu)
+    valu<-value
+    valu[which(is.na(valu)&loqMethodCode=="INS")]<-loqValue[which(is.na(valu)&loqMethodCode=="INS")]*1/2
+    
+    # Logaritmicka transformace
+    if (transformationType=="log") {
+      valu<-log(valu)
+    }
+    
+    # Jednotky musi byt stejne
+    if (length(unique(unit))>1) {
+      stop("Units of some records differ!")
+    } else {
+      unit<-unique(unit)
+    }
+    
+    # Rocni agregace do noveho data.frame aggr
+    year<-gendate(substr(dateTimeString,1,4))
+    aggr<-data.frame(aggregate(valu,by=list(year),FUN=f1)[,2],
+                     as.character(unit),
+                     centralValueType,
+                     aggregate(valu,by=list(year),FUN=f3)[,2],
+                     aggregate(valu,by=list(year),FUN=f2)[,2],
+                     whiskerValueType,
+                     gendate(aggregate(year,by=list(year),FUN=mean)[,1]),
+                     as.character(aggregate(dateTime,by=list(year),FUN=mean)[,1]),
+                     as.character(aggregate(valu,by=list(year),FUN=length)[,2]),
+                     as.character(aggregate(value,by=list(year),FUN=loqlength)[,2]))
+    colnames(aggr)<-c("centralValue","unit","centralValueType","whiskerTopValue","whiskerBottomValue","whiskerType","dateTime","dateTimeString","n","nUnderLOQ")
+    
+    if (nrow(aggr)>1) {
+      hole<-3*mean(aggr$dateTime[-1]-aggr$dateTime[-nrow(aggr)],trim=0.05)
+    } else {
+      hole<-0
+    }
+    
+    # k udava poradi segmentu jedne casove rady
+    k<-1
+    
+    # j cyklus bezi pres jednotliva mereni
+    for (j in 1:nrow(aggr)) {
+      if (j!=1) {
+        if ((aggr$dateTime[j]-aggr$dateTime[j-1])>hole) {
+          k<-k+1
+        }
+      }
+      # Vystupni promenne
+      cenValue    <-c(cenValue,aggr$centralValue[j])
+      botValue    <-c(botValue,aggr$whiskerBottomValue[j])
+      topValue    <-c(topValue,aggr$whiskerTopValue[j])
+      dateOfPoint <-c(dateOfPoint,aggr$dateTime[j])
+      nameOfSeries<-c(nameOfSeries,loca)
+      segment     <-c(segment,k)
+      typeOfSeries<-c(typeOfSeries,"aggr")
+      globalUnit  <-c(globalUnit,as.character(unique(aggr$unit)))
+    }
+    
+    # Popis agregovanych casovych rad ve 2. cyklu
+    if (k==1) {
+      res<-genstatistic(aggr$centralValue,aggr$dateTime)$res
+      
+      parameterNames<-c("delta",
+                        "mannKendall",
+                        "mannKendallP",
+                        "daniels",
+                        "danielsP",
+                        "mean",
+                        "sd",
+                        "geomean",
+                        "gsd",
+                        "median",
+                        "min",
+                        "max",
+                        "perc5",
+                        "perc25",
+                        "perc75",
+                        "perc95",
+                        "geoMean95CIUpperBound",
+                        "geoMean95CILowerBound",
+                        "mean95CIUpperBound",
+                        "mean95CILowerBound")
+      
+      parameterValues<-c(res$delta,
+                         res$"Mann-Kendall",
+                         res$MKp,
+                         res$Daniels,
+                         res$Dp,
+                         res$mean,
+                         res$sd,
+                         res$"geom. mean",
+                         res$"geom. sd",
+                         res$median,
+                         res$min,
+                         res$max,
+                         quantile05(aggr$centralValue),
+                         quantile25(aggr$centralValue),
+                         quantile75(aggr$centralValue),
+                         quantile95(aggr$centralValue),
+                         res$"geom. mean"*res$"geom. sd"^qnorm(0.975),
+                         res$"geom. mean"*res$"geom. sd"^qnorm(0.025),
+                         res$mean+qnorm(0.975)*res$sd,
+                         res$mean+qnorm(0.025)*res$sd)
+      
+      seriesDescription<-c(seriesDescription,rep(loca,length(parameterNames)))
+      parameterDescription<-c(parameterDescription,parameterNames)
+      valueDescription<-c(valueDescription,parameterValues)
+    }
+  }
+
+
+
   
   dateOfPoint<-as.character(as.Date(dateOfPoint,origin="1970-01-01"))
   
