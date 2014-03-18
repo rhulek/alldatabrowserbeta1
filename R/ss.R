@@ -1,6 +1,8 @@
-ss<-function(records,centralValueType="median",whiskerValueType="5_95",transformationType="none") {
+ss<-function(recordsWrapper,centralValueType="median",whiskerValueType="5_95",transformationType="none") {
   
   library(genasis)
+  
+  records<-recordsWrapper[[1]]
   
   whisk<-c("5_95","25_75","min_max","2iq","ci")
   whisl<-c("quantile05","quantile25","min","iql","cil")

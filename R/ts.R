@@ -1,6 +1,8 @@
-ts<-function(records,centralValueType="median",whiskerValueType="5_95",transformationType="none") {
+ts<-function(recordsWrapper,centralValueType="median",whiskerValueType="5_95",transformationType="none") {
   
   library(genasis)
+  
+  records<-recordsWrapper[[1]]
   
   cenValue<-c()
   topValue<-c()
