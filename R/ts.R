@@ -636,7 +636,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     valueDescription<-c(valueDescription,parameterValues)
   }
   
-  dateOfPoint<-as.character(as.Date(dateOfPoint,origin="1970-01-01"))
+
   
   casovani<-c(casovani,"Konec",as.character(format(Sys.time(), "%H:%M:%OS3")))
   
