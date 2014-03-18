@@ -2,6 +2,8 @@ ss<-function(records,centralValueType="median",whiskerValueType="5_95",transform
   
   library(genasis)
   
+  records = records$records;
+  
   whisk<-c("5_95","25_75","min_max","2iq","ci")
   whisl<-c("quantile05","quantile25","min","iql","cil")
   whisu<-c("quantile95","quantile75","max","iqu","ciu")
