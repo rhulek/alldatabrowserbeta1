@@ -453,7 +453,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     # Rocni agregace do noveho data.frame aggr
     year<-gendate(substr(dateTimeString,1,4))
     
-    return(substr(dateTimeString,1,4))
+    return(list(dateTimeString,substr(dateTimeString,1,4),class(substr(dateTimeString,1,4)),gendate(substr(dateTimeString,1,4)),class(gendate(substr(dateTimeString,1,4)))))
     
     aggr<-data.frame(aggregate(valu,by=list(year),FUN=f1)[,2],
                      as.character(unit),
