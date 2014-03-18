@@ -220,8 +220,6 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
                      as.character(aggregate(value,by=list(year),FUN=loqlength)[,2]))
     colnames(aggr)<-c("centralValue","unit","centralValueType","whiskerTopValue","whiskerBottomValue","whiskerType","dateTime","dateTimeString","n","nUnderLOQ")
     
-    return(gendate(aggregate(year,by=list(year),FUN=mean)[,1]))
-    
     if (nrow(aggr)>1) {
       hole<-3*mean(aggr$dateTime[-1]-aggr$dateTime[-nrow(aggr)],trim=0.05)
     } else {
@@ -481,6 +479,8 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
                         as.numeric(genplot(aggr$centralValue,aggr$dateTime,n=20,distr="lnorm",plot=FALSE)$lower[1,]),
                         as.numeric(genplot(aggr$centralValue,aggr$dateTime,n=20,distr="lnorm",plot=FALSE)$upper[1,]))
       colnames(curve)<-c("belt","line","lower","upper")
+      
+      return(curve$belt)
       
       # Logaritmace v pripade log transformace (trend bude linearni)
       if (transformationType=="log") {
