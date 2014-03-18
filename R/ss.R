@@ -1,4 +1,6 @@
-ss<-function(records,centralValueType="median",whiskerValueType="5_95",transformationType="none") {
+ss<-function(recordsWrapper,centralValueType="median",whiskerValueType="5_95",transformationType="none") {
+  
+  return recordsWrapper$records;
   
   library(genasis)
   
