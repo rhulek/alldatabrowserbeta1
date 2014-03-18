@@ -300,6 +300,97 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
   }
 
 
+  ## Treti opakovani cyklu - vypocet trendu primarnich rad
+  
+  # i cyklus bezi pres sites
+  for (i in 1:length(records)) {
+    loca<-as.character(records[[i]]$rowLabel)
+    value         <-c()
+    loqValue      <-c()
+    loqMethodCode <-c()
+    unit          <-c()
+    dateTime      <-c()
+    dateTimeString<-c()
+    timeLength    <-c()
+    
+    casovani<-c(casovani,paste0("3. cyklus, ",i,". iterace"),as.character(format(Sys.time(), "%H:%M:%OS3")))
+    
+    
+    for (j in 1:length(records[[i]]$values)) {
+      value         <-c(value,         records[[i]]$values[[j]]$value)
+      loqValue      <-c(loqValue,      records[[i]]$values[[j]]$loqValue)
+      loqMethodCode <-c(loqMethodCode, records[[i]]$values[[j]]$loqMethodCode)
+      unit          <-c(unit,          records[[i]]$values[[j]]$unit)
+      dateTime      <-c(dateTime,      records[[i]]$values[[j]]$dateTime)
+      dateTimeString<-c(dateTimeString,records[[i]]$values[[j]]$dateTimeString)
+      timeLength    <-c(timeLength,    records[[i]]$values[[j]]$timeLength)
+    }
+    
+    dateTime<-as.Date(dateTimeString)
+    
+    value         <-value[order(dateTimeString)]
+    loqValue      <-loqValue[order(dateTimeString)]
+    loqMethodCode <-loqMethodCode[order(dateTimeString)]
+    unit          <-unit[order(dateTimeString)]
+    dateTime      <-dateTime[order(dateTimeString)]
+    timeLength    <-timeLength[order(dateTimeString)]
+    dateTimeString<-dateTimeString[order(dateTimeString)]
+    
+    # Nahrada LoQ (v promenne valu budou hodnoty vstupujici do vypoctu)
+    valu<-value
+    valu[which(is.na(valu)&loqMethodCode=="INS")]<-loqValue[which(is.na(valu)&loqMethodCode=="INS")]*1/2
+    
+    if (length(dateTime)>1) {
+      hole<-3*mean(dateTime[-1]-dateTime[-length(records[[i]]$values)],trim=0.05)
+    } else {
+      hole<-0
+    }
+    
+    if (max(c(hole,dateTime[-1]-dateTime[-length(records[[i]]$values)]))>hole|(length(dateTime)<3)) { # Hole added to the vector to avoid problems with vector of length 1.
+      series<-NA
+    } else {
+      curve<-data.frame(as.Date(as.numeric(genplot(valu,dateTime,n=20,distr="lnorm",plot=FALSE)$belt[1,]),origin="1970-01-01"),
+                        as.numeric(genplot(valu,dateTime,n=20,distr="lnorm",plot=FALSE)$line[1,]),
+                        as.numeric(genplot(valu,dateTime,n=20,distr="lnorm",plot=FALSE)$lower[1,]),
+                        as.numeric(genplot(valu,dateTime,n=20,distr="lnorm",plot=FALSE)$upper[1,]))
+      colnames(curve)<-c("belt","line","lower","upper")
+      
+      # Logaritmace v pripade log transformace (trend bude linearni)
+      if (transformationType=="log") {
+        curve$line<-log(curve$line)
+        curve$lower<-log(curve$lower)
+        curve$upper<-log(curve$upper)
+      }
+      
+      # j cyklus bezi pres jednotlive body krivky
+      for (j in 1:nrow(curve)) {
+        
+        # Vystupni promenne
+        cenValue    <-c(cenValue,curve$line[j])
+        botValue    <-c(botValue,curve$lower[j])
+        topValue    <-c(topValue,curve$upper[j])
+        dateOfPoint <-c(dateOfPoint,as.character(curve$belt[j]))
+        nameOfSeries<-c(nameOfSeries,loca)
+        segment     <-c(segment,1)
+        typeOfSeries<-c(typeOfSeries,"prim_trend") 
+        globalUnit  <-c(globalUnit,as.character(unique(unit)))
+      }
+    }
+    
+    # Popis trendovych krivek v 3. cyklu.    
+    if (max(c(hole,dateTime[-1]-dateTime[-length(records[[i]]$values)]))<=hole) {
+      parameterNames<-c("slope",
+                        "intercept")
+      
+      parameterValues<-c(genplot(valu,dateTime,n=20,distr="lnorm",plot=FALSE)$slope,
+                         genplot(valu,dateTime,n=20,distr="lnorm",plot=FALSE)$intercept)
+      
+      seriesDescription<-c(seriesDescription,rep(loca,length(parameterNames)))
+      parameterDescription<-c(parameterDescription,parameterNames)
+      valueDescription<-c(valueDescription,parameterValues)
+    }
+  }
+  
 
   
   dateOfPoint<-as.character(as.Date(dateOfPoint,origin="1970-01-01"))
