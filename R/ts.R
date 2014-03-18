@@ -1,8 +1,5 @@
 ts<-function(records,centralValueType="median",whiskerValueType="5_95",transformationType="none") {
   
-  casovani<-c()
-  casovani<-c(casovani,"Pred nactenim knihovny",as.character(format(Sys.time(), "%H:%M:%OS3")))
-  
   library(genasis)
   
   cenValue<-c()
@@ -29,8 +26,6 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     dateTime      <-c()
     dateTimeString<-c()
     timeLength    <-c()
-    
-    casovani<-c(casovani,paste0("1. cyklus, ",i,". iterace"),as.character(format(Sys.time(), "%H:%M:%OS3")))
     
     for (j in 1:length(records[[i]]$values)) {
       value         <-c(value,         records[[i]]$values[[j]]$value)
@@ -166,9 +161,6 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     dateTime      <-c()
     dateTimeString<-c()
     timeLength    <-c()
-    
-    casovani<-c(casovani,paste0("2. cyklus, ",i,". iterace"),as.character(format(Sys.time(), "%H:%M:%OS3")))
-    
     
     for (j in 1:length(records[[i]]$values)) {
       value         <-c(value,         records[[i]]$values[[j]]$value)
@@ -313,9 +305,6 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     dateTimeString<-c()
     timeLength    <-c()
     
-    casovani<-c(casovani,paste0("3. cyklus, ",i,". iterace"),as.character(format(Sys.time(), "%H:%M:%OS3")))
-    
-    
     for (j in 1:length(records[[i]]$values)) {
       value         <-c(value,         records[[i]]$values[[j]]$value)
       loqValue      <-c(loqValue,      records[[i]]$values[[j]]$loqValue)
@@ -415,9 +404,6 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     dateTime     <-c()
     dateTimeString<-c()
     timeLength   <-c()
-    
-    casovani<-c(casovani,paste0("4. cyklus, ",i,". iterace"),as.character(format(Sys.time(), "%H:%M:%OS3")))
-    
     
     for (j in 1:length(records[[i]]$values)) {
       value         <-c(value,         records[[i]]$values[[j]]$value)
@@ -637,8 +623,6 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
   }
   
   dateOfPoint<-as.character(as.Date(dateOfPoint,origin="1970-01-01"))
-  
-  casovani<-c(casovani,"Konec",as.character(format(Sys.time(), "%H:%M:%OS3")))
   
   return(list(cenValue,botValue,topValue,dateOfPoint,nameOfSeries,segment,typeOfSeries,seriesDescription,parameterDescription,valueDescription))
 }
