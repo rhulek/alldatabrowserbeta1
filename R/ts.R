@@ -54,7 +54,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     
     # Nahrada LoQ (v promenne valu budou hodnoty vstupujici do vypoctu)
     valu<-value
-    valu[which(is.na(valu)&loqMethodCode=="INS")]<-loqValue[which((is.na(valu)|is.null(valu))&loqMethodCode=="INS")]*1/2
+    valu[which(is.na(valu)&loqMethodCode=="INS")]<-loqValue[which(is.na(valu)&loqMethodCode=="INS")]*1/2
     
     # Logaritmicka transformace
     if (transformationType=="log") {
@@ -81,7 +81,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
       # Vystupni promenne
       cenValue    <-c(cenValue,valu[j])
       botValue    <-c(botValue,NA)
-      topValue    <-c(botValue,NA)
+      topValue    <-c(topValue,NA)
       dateOfPoint <-c(dateOfPoint,dateTimeString[j])
       nameOfSeries<-c(nameOfSeries,loca)
       segment     <-c(segment,k)
@@ -192,7 +192,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     
     # Nahrada LoQ (v promenne valu budou hodnoty vstupujici do vypoctu)
     valu<-value
-    valu[which(is.na(valu)&loqMethodCode=="INS")]<-loqValue[which((is.na(valu)|is.null(valu))&loqMethodCode=="INS")]*1/2
+    valu[which(is.na(valu)&loqMethodCode=="INS")]<-loqValue[which(is.na(valu)&loqMethodCode=="INS")]*1/2
     
     # Logaritmicka transformace
     if (transformationType=="log") {
@@ -239,7 +239,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
       # Vystupni promenne
       cenValue    <-c(cenValue,aggr$centralValue[j])
       botValue    <-c(botValue,aggr$whiskerBottomValue[j])
-      topValue    <-c(botValue,aggr$whiskerTopValue[j])
+      topValue    <-c(topValue,aggr$whiskerTopValue[j])
       dateOfPoint <-c(dateOfPoint,aggr$dateTimeString[j])
       nameOfSeries<-c(nameOfSeries,loca)
       segment     <-c(segment,k)
@@ -338,7 +338,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     
     # Nahrada LoQ (v promenne valu budou hodnoty vstupujici do vypoctu)
     valu<-value
-    valu[which(is.na(valu)&loqMethodCode=="INS")]<-loqValue[which((is.na(valu)|is.null(valu))&loqMethodCode=="INS")]*1/2
+    valu[which(is.na(valu)&loqMethodCode=="INS")]<-loqValue[which(is.na(valu)&loqMethodCode=="INS")]*1/2
     
     if (length(dateTime)>1) {
       hole<-3*mean(dateTime[-1]-dateTime[-length(records[[i]]$values)],trim=0.05)
@@ -368,7 +368,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
         # Vystupni promenne
         cenValue    <-c(cenValue,curve$line[j])
         botValue    <-c(botValue,curve$lower[j])
-        topValue    <-c(botValue,curve$upper[j])
+        topValue    <-c(topValue,curve$upper[j])
         dateOfPoint <-c(dateOfPoint,as.character(curve$belt[j]))
         nameOfSeries<-c(nameOfSeries,loca)
         segment     <-c(segment,1)
@@ -441,7 +441,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     
     # Nahrada LoQ (v promenne valu budou hodnoty vstupujici do vypoctu)
     valu<-value
-    valu[which(is.na(valu)&loqMethodCode=="INS")]<-loqValue[which((is.na(valu)|is.null(valu))&loqMethodCode=="INS")]*1/2
+    valu[which(is.na(valu)&loqMethodCode=="INS")]<-loqValue[which(is.na(valu)&loqMethodCode=="INS")]*1/2
     
     # Jednotky musi byt stejne
     if (length(unique(unit))>1) {
@@ -492,7 +492,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
         # Vystupni promenne
         cenValue    <-c(cenValue,curve$line[j])
         botValue    <-c(botValue,curve$lower[j])
-        topValue    <-c(botValue,curve$upper[j])
+        topValue    <-c(topValue,curve$upper[j])
         dateOfPoint <-c(dateOfPoint,as.character(curve$belt[j]))
         nameOfSeries<-c(nameOfSeries,loca)
         segment     <-c(segment,1)
@@ -571,7 +571,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     # Vystupni promenne
     cenValue    <-c(cenValue,aggr$centralValue[j])
     botValue    <-c(botValue,aggr$whiskerBottomValue[j])
-    topValue    <-c(botValue,aggr$whiskerTopValue[j])
+    topValue    <-c(topValue,aggr$whiskerTopValue[j])
     dateOfPoint <-c(dateOfPoint,aggr$dateTimeString[j])
     nameOfSeries<-c(nameOfSeries,"Total")
     segment     <-c(segment,k)
