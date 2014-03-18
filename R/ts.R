@@ -369,7 +369,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
         cenValue    <-c(cenValue,curve$line[j])
         botValue    <-c(botValue,curve$lower[j])
         topValue    <-c(topValue,curve$upper[j])
-        dateOfPoint <-c(dateOfPoint,as.character(curve$belt[j]))
+        dateOfPoint <-c(dateOfPoint,as.character(as.Date(curve$belt[j],origin="1970-01-01")))
         nameOfSeries<-c(nameOfSeries,loca)
         segment     <-c(segment,1)
         typeOfSeries<-c(typeOfSeries,"prim_trend") 
@@ -480,8 +480,6 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
                         as.numeric(genplot(aggr$centralValue,aggr$dateTime,n=20,distr="lnorm",plot=FALSE)$upper[1,]))
       colnames(curve)<-c("belt","line","lower","upper")
       
-      return(curve$belt)
-      
       # Logaritmace v pripade log transformace (trend bude linearni)
       if (transformationType=="log") {
         curve$line<-log(curve$line)
@@ -495,7 +493,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
         cenValue    <-c(cenValue,curve$line[j])
         botValue    <-c(botValue,curve$lower[j])
         topValue    <-c(topValue,curve$upper[j])
-        dateOfPoint <-c(dateOfPoint,as.character(curve$belt[j]))
+        dateOfPoint <-c(dateOfPoint,as.character(as.Date(curve$belt[j],origin="1970-01-01")))
         nameOfSeries<-c(nameOfSeries,loca)
         segment     <-c(segment,1)
         typeOfSeries<-c(typeOfSeries,"aggr_trend")
