@@ -636,6 +636,8 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     valueDescription<-c(valueDescription,parameterValues)
   }
   
+  dateOfPoint<-as.character(gendate(dateOfPoint))
+  
   casovani<-c(casovani,"Konec",as.character(format(Sys.time(), "%H:%M:%OS3")))
   
   return(list(cenValue,botValue,topValue,dateOfPoint,nameOfSeries,segment,typeOfSeries,seriesDescription,parameterDescription,valueDescription))
