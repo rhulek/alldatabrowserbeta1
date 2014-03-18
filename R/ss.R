@@ -1,7 +1,8 @@
 ss<-function(records,centralValueType="median",whiskerValueType="5_95",transformationType="none") {
   
-  library(alldatabrowser)
-  library(genasis)  
+  library(genasis)
+  
+  return(class(records))
   
   whisk<-c("5_95","25_75","min_max","2iq","ci")
   whisl<-c("quantile05","quantile25","min","iql","cil")
