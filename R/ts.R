@@ -518,7 +518,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
 
   ## Vypocet prostorove agregovane rady z jednotlivych rocnich agregaci (jen jednou pro cely datovy soubor)
   valu<-as.numeric(cenValue)
-  data<-as.Date(dateOfPoint)
+  data<-as.Date(dateOfPoint,origin="1970-01-01")
   unit<-globalUnit
   
   unit<-unit[order(data)]
