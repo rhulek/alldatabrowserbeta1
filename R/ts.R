@@ -82,7 +82,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
       cenValue    <-c(cenValue,valu[j])
       botValue    <-c(botValue,NA)
       topValue    <-c(topValue,NA)
-      dateOfPoint <-c(dateOfPoint,dateTimeString[j])
+      dateOfPoint <-c(dateOfPoint,dateTime[j])
       nameOfSeries<-c(nameOfSeries,loca)
       segment     <-c(segment,k)
       typeOfSeries<-c(typeOfSeries,"prim")
@@ -220,8 +220,6 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
                      as.character(aggregate(value,by=list(year),FUN=loqlength)[,2]))
     colnames(aggr)<-c("centralValue","unit","centralValueType","whiskerTopValue","whiskerBottomValue","whiskerType","dateTime","dateTimeString","n","nUnderLOQ")
     
-    return(aggr$dateTimeString[j])
-    
     if (nrow(aggr)>1) {
       hole<-3*mean(aggr$dateTime[-1]-aggr$dateTime[-nrow(aggr)],trim=0.05)
     } else {
@@ -242,7 +240,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
       cenValue    <-c(cenValue,aggr$centralValue[j])
       botValue    <-c(botValue,aggr$whiskerBottomValue[j])
       topValue    <-c(topValue,aggr$whiskerTopValue[j])
-      dateOfPoint <-c(dateOfPoint,aggr$dateTimeString[j])
+      dateOfPoint <-c(dateOfPoint,aggr$dateTime[j])
       nameOfSeries<-c(nameOfSeries,loca)
       segment     <-c(segment,k)
       typeOfSeries<-c(typeOfSeries,"aggr")
@@ -574,7 +572,7 @@ ts<-function(records,centralValueType="median",whiskerValueType="5_95",transform
     cenValue    <-c(cenValue,aggr$centralValue[j])
     botValue    <-c(botValue,aggr$whiskerBottomValue[j])
     topValue    <-c(topValue,aggr$whiskerTopValue[j])
-    dateOfPoint <-c(dateOfPoint,aggr$dateTimeString[j])
+    dateOfPoint <-c(dateOfPoint,aggr$dateTime[j])
     nameOfSeries<-c(nameOfSeries,"Total")
     segment     <-c(segment,k)
     typeOfSeries<-c(typeOfSeries,"whol")
